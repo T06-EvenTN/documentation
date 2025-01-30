@@ -43,6 +43,12 @@
       "url": "https://mintlify.com/community"
     },
     {
+      "name": "API Reference",
+      "openapi": "./api-reference/openapi.yml",
+      "url": "api-reference",
+      "icon": "square-terminal"
+    },
+    {
       "name": "Blog",
       "icon": "newspaper",
       "url": "https://mintlify.com/blog"
