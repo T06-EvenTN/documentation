@@ -1,106 +1,70 @@
 ---
-title: 'Backend'
-description: 'Build your own instance of the EvenTN backend'
+title: "Backend"
+description: "Crea la tua istanza di eventn-backend."
 ---
 
 <Info>
-  **Prerequisite**: Please install Node.js (version 19 or higher) before proceeding.
+  **Prerequisite**: Node.js (version 21)
 </Info>
 
-Follow these steps to install and run the EvenTN backend on your operating system:
-
-**Step 1**: Install Mintlify:
-
-<CodeGroup>
-
-  ```bash npm
-  npm i -g mintlify
-  ```
-
-```bash yarn
-yarn global add mintlify
-```
-
-</CodeGroup>
-
-**Step 2**: Navigate to the docs directory (where the `mint.json` file is located) and execute the following command:
+**Step 0**: Clona il repository:
 
 ```bash
-mintlify dev
+git clone https://github.com/T06-EvenTN/backend.git
+cd backend/
 ```
 
-A local preview of your documentation will be available at `http://localhost:3000`.
-
-### Custom Ports
-
-By default, Mintlify uses port 3000. You can customize the port Mintlify runs on by using the `--port` flag. To run Mintlify on port 3333, for instance, use this command:
-
-```bash
-mintlify dev --port 3333
-```
-
-If you attempt to run Mintlify on a port that's already in use, it will use the next available port:
-
-```md
-Port 3000 is already in use. Trying 3001 instead.
-```
-
-## Mintlify Versions
-
-Please note that each CLI release is associated with a specific version of Mintlify. If your local website doesn't align with the production version, please update the CLI:
+**Step 1**: Installa le dipendenze necessarie:
 
 <CodeGroup>
 
 ```bash npm
-npm i -g mintlify@latest
-```
-
-```bash yarn
-yarn global upgrade mintlify
+npm install
 ```
 
 </CodeGroup>
 
-## Validating Links
-
-The CLI can assist with validating reference links made in your documentation. To identify any broken links, use the following command:
+**Step 2**: Clona il file .env.example e inserisci i file necessari:
 
 ```bash
-mintlify broken-links
+cp .env.example .env
+# modifica .env con il tuo editor di testo preferito
 ```
 
-## Deployment
+**Step 3**: Pronti al lancio\! usa il seguente comando per lanciare il backend:
 
-<Tip>
-  Unlimited editors available under the [Pro
-  Plan](https://mintlify.com/pricing) and above.
-</Tip>
+```bash
+npm run prod
+# oppure npm run dev per eseguire test in locale
+```
 
-If the deployment is successful, you should see the following:
+### URL database
 
-<Frame>
-  <img src="/images/checks-passed.png" style={{ borderRadius: '0.5rem' }} />
-</Frame>
+Per l'indirizzo del database fare riferimento alla pagina apposita [database](database.mdx)
 
-## Code Formatting
+### Porte
 
-We suggest using extensions on your IDE to recognize and format MDX. If you're a VSCode user, consider the [MDX VSCode extension](https://marketplace.visualstudio.com/items?itemName=unifiedjs.vscode-mdx) for syntax highlighting, and [Prettier](https://marketplace.visualstudio.com/items?itemName=esbenp.prettier-vscode) for code formatting.
+Il numero di porta usato dal backend viene specificato nel file .env; per test in locale raccomandiamo l'utilizzo della porta 8080, tuttavia quest'ultima può essere modificata a seconda delle esigenze.
 
-## Troubleshooting
+## Access e refresh token
 
-<AccordionGroup>
-  <Accordion title='Error: Could not load the "sharp" module using the darwin-arm64 runtime'>
+Questi valori sono essenziali per la sicurezza dell'applicazione, in quanto vengono utilizzati dalla libreria JWT per generare in modo corretto i token da utilizzare all'interno della web app. Questi possono essere generati in qualsiasi maniera, tuttavia consigliamo il seguente codice JS da eseguire direttamente nel terminale (lanciando prima il runtime usando il comando "node") per generare rapidamente una stringa randomica di 64 caratteri:
 
-    This may be due to an outdated version of node. Try the following:
-    1. Remove the currently-installed version of mintlify: `npm remove -g mintlify`
-    2. Upgrade to Node v19 or higher.
-    3. Reinstall mintlify: `npm install -g mintlify`
-  </Accordion>
+```javascript
+require('crypto').randomBytes(64).toString('hex')
+```
 
-  <Accordion title="Issue: Encountering an unknown error">
-  
-    Solution: Go to the root of your device and delete the \~/.mintlify folder. Afterwards, run `mintlify dev` again.
-  </Accordion>
-</AccordionGroup>
+i risultati di questo comando possono essere usati in modo sicuro come access e refresh token.
 
-Curious about what changed in the CLI version? [Check out the CLI changelog.](https://www.npmjs.com/package/mintlify?activeTab=versions)
+<Warning>
+  In caso si scelga di utilizzare metodi alternativi per generare questi token, raccomandiamo una lunghezza minima di **64 caratteri** e sconsigliamo l'utilizzo di geenratori pseudorandomici basati su seed facilmente manipolabili. Più l'entropia è alta, meglio è.
+</Warning>
+
+## Cloudinary
+
+All'interno del file .env, viene richiesto l'inserimento di 3 valori facenti riferimento al servizio di object storage **Cloudinary**, necessario per l'utilizzo di immagini personalizzate associate ai vari eventi. Per ottenere tutte le chiavi necessarie è sufficiente:
+
+1. Creare un account presso [www.cloudinary.com](http://www.cloudinary.com)
+2. Una volta creato l'account, sarà disponibile un menù a tendina in alto a destra contenente il vostro production environment. il nome di questo environment corrisponde a **CLOUDINARY_NAME** nel vostro .env
+3. Sotto la voce "production environment" sarà presente un tasto con scritto "Go to API Keys". Entrati in questa sezione saranno disponibili due valori corrisponenti ai vostri API secrets
+4. il valore "API Key" del sito di Cloudinary corrisponde al valore **CLOUDINARY_KEY** del vostro .env, così come il valore "API Secret" cossirponde al valore **CLOUDINARY_SECRET** del vostro .env
