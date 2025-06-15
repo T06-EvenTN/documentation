@@ -40,7 +40,7 @@
     {
       "name": "API Reference",
       "openapi": "/api-reference/openapi.yml",
-      "url": "api-reference",
+      "url": "https://github.com/T06-EvenTN",
       "icon": "square-terminal"
     }
   ],
